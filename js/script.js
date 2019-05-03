@@ -35,8 +35,9 @@ const pageHeader = document.querySelector(".page-header");
 const studentList = document.querySelector(".student-list");
 const studentItem = studentList.children.length;
 const currentPage = 1;
-const studentsPerPage = 10;
-const totalPages = studentItem / studentsPerPage;
+const minPerPage = 1;
+const maxPerPage = 10;
+const totalPages = studentItem / maxPerPage;
 const showPage = (list, page) => {
   list = studentItem;
   page = totalPages;
