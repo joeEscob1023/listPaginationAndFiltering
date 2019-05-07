@@ -20,8 +20,8 @@ const showPage = (list, page) => {
     loop takes the list and if the i is between the min and max it will load, while the other list items out side of the condition will be hidden.
 
     index 0 = 1-10
-    index 2 = 11-20
     ect.
+    index 2 = 11-20
   */
 
   for (let i = 0; i < list.length; i++) {
