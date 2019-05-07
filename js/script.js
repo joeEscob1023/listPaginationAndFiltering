@@ -3,87 +3,82 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
+//takes the studentList ul and turns it from html collection to nodeList
+const studentListUl = document.querySelectorAll(".student-list")[0];
+console.log(studentListUl);
+//console.log(studentListUl);
+const studentListLi = studentListUl.children;
+const studentsPerPage = 10;
 
-/*** 
-   Add your global variables that store the DOM elements you will 
-   need to reference and/or manipulate. 
-   
-   But be mindful of which variables should be global and which 
-   should be locally scoped to one of the two main functions you're 
-   going to create. A good general rule of thumb is if the variable 
-   will only be used inside of a function, then it can be locally 
-   scoped to that function.
-***/
-const page = document.querySelector(".page");
-const pageHeader = document.querySelector(".page-header");
+//list of students, page index
 
-/*** 
-   Create the `showPage` function to hide all of the items in the 
-   list except for the ten you want to show.
-
-   Pro Tips: 
-     - Keep in mind that with a list of 54 students, the last page 
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when 
-       you initially define the function, and it acts as a variable 
-       or a placeholder to represent the actual function `argument` 
-       that will be passed into the parens later when you call or 
-       "invoke" the function 
-***/
-const studentList = document.querySelector(".student-list");
-const studentItem = studentList.children.length;
-const currentPage = 1;
-const minPerPage = 1;
-const maxPerPage = 10;
-const totalPages = studentItem / maxPerPage;
 const showPage = (list, page) => {
-  list = studentItem;
-  page = totalPages;
-  console.log(totalPages);
+  const minPerPage = page * studentsPerPage;
+  const maxPerPage = (page + 1) * studentsPerPage;
+
+  /*
+    loop takes the list and if the i is between the min and max it will load, while the other list items out side of the condition will be hidden.
+
+    index 0 = 1-10
+    index 2 = 11-20
+    ect.
+  */
 
   for (let i = 0; i < list.length; i++) {
-    if (i >= studentsPerPage) {
+    if (i >= minPerPage && i < maxPerPage) {
+      list[i].style.display = "block";
+    } else {
       list[i].style.display = "none";
-    }
-    if (i <= studentsPerPage) {
-      list[i].style.display = "";
     }
   }
 };
-showPage();
-//showPage(studentItem, 10);
-/*** 
-   Create the `appendPageLinks function` to generate, append, and add 
-   functionality to the pagination buttons.
-***/
+
 const appendPageLinks = list => {
-  const pages = studentItem.length / 10;
+  //how many total students
+  const students = list.length;
+  //amount of studnets divided by 10
+  const pages = students / studentsPerPage;
+
   const div = document.createElement("div");
   div.className = "pagination";
-  page.appendChild(div);
-  //showPage();
+
+  const startingPage = document.querySelectorAll(".page")[0];
+  startingPage.appendChild(div);
+  console.log(startingPage);
+  console.log(div);
+
   const ul = document.createElement("ul");
   div.appendChild(ul);
 
+  const aList = document.getElementsByTagName("A");
+
+  /*loop through how many pages there should be based on how many students there are divided by 10 students per page.
+   */
   for (let i = 0; i < pages; i++) {
     const li = document.createElement("li");
     const a = document.createElement("a");
-    li.appendChild(a);
     ul.appendChild(li);
+    //add 1 so a tags dont start at 0
     a.textContent = i + 1;
+    li.appendChild(a);
     a.addEventListener("click", e => {
-      const a = li.children;
-      for (var i = 0; i < a.length; i++) {
-        if (e.target.tagName === "A") {
-          a[i].className = "active";
-          console.log(a[i]);
-        }
+      //loop through a tags
+      for (let i = 0; i < aList.length; i++) {
+        console.log(aList[i]);
+        //removes className on a tag
+        aList[i].className = "";
+        //adds className to the clicked a tag
+        e.target.className = "active";
       }
+      /*list of 10 students and what page they should be on depending on which a tag is clicked.
+       */
+      showPage(list, i);
     });
   }
+  //Makes first a tag 'active' on load.
+  aList[0].className = "active";
 };
-appendPageLinks(studentItem);
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+//list of students, first page
+showPage(studentListLi, 0);
+//List of students
+appendPageLinks(studentListLi);
